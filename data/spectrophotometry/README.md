@@ -5,7 +5,7 @@ This directory contains high-precision spectral reflectance measurements obtaine
 ## Files
 
 - `spectrophotometer_readings_63rows.csv`: 63 measurement rows across 20 sessions (with $L^*, a^*, b^*, X, Y, Z, C^*, h^\circ$ coordinates).
-- `spectrophotometer_ledger_36channels.jsonl`: Complete 36-channel spectral reflectance records (380–730 nm in 10 nm increments).
+- `spectrophotometer_ledger_36channels.jsonl`: Complete 36-channel spectral reflectance records (380–730 nm in 10 nm increments, keyed by `wl` for wavelength array and `spec` for reflectance array).
 - `图_a*b平面_全量.png`: 2D chromaticity distribution of all physical patches.
 - `图_光谱_全量.png`: Spectral power distribution across all measurement sessions.
 - `图_L时序_全量.png`: Time-series stability verification of luminance $L^*$.
