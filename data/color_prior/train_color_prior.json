@@ -1,0 +1,107 @@
+{
+  "schema_version": "1.0",
+  "protocol": "CRA-ZHUXIAN-COLOR-KNOWLEDGE-1.0",
+  "source_split": "train",
+  "generated_utc": "2026-07-31T02:00:59.440132+00:00",
+  "scope": "digitized-image-referred color appearance; assumed sRGB encoding; not pigment or physical-object colorimetry",
+  "palette": {
+    "centers_lab": [
+      [
+        41.95657498181394,
+        57.392335508704306,
+        39.20932982324765
+      ],
+      [
+        70.56952002069227,
+        1.2309597181287204,
+        7.364216051711332
+      ],
+      [
+        44.784590474915,
+        0.25495966383308305,
+        4.302009830362527
+      ],
+      [
+        75.1980520112395,
+        -5.430577557141972,
+        62.21377220548599
+      ],
+      [
+        53.75237985332669,
+        36.04415558353185,
+        53.81720674608606
+      ],
+      [
+        44.03106075833111,
+        -36.85297454662527,
+        20.834159896211066
+      ],
+      [
+        51.93923852210599,
+        7.682129838227564,
+        35.23903189172086
+      ],
+      [
+        51.64493389871712,
+        -25.11190822134824,
+        -6.770849897541186
+      ],
+      [
+        42.32314404385671,
+        26.837884074855314,
+        -30.70590331524745
+      ]
+    ],
+    "weights": [
+      0.19350260141985012,
+      0.16487878969038225,
+      0.15741718283866662,
+      0.12196807243608698,
+      0.09471563571604945,
+      0.08879949001212104,
+      0.07188301238587257,
+      0.06689695096146676,
+      0.03993826453950421
+    ],
+    "quality": {
+      "work_count": 370,
+      "representation": "cropped",
+      "preprocessing": "paper-white normalized sensitivity-primary; paper and black outline excluded",
+      "global_k": 9,
+      "work_equalized": true
+    }
+  },
+  "provenance": {
+    "authoritative_manifest": "/Volumes/Graduate Program Documents/confyui/刀版图识别主题/experiments/cra_objective/data_audit/suggested_split_manifest.csv",
+    "authoritative_manifest_sha256": "e307b53cebdb17e8bd44ad04aeb3eb79f54bbd3564c392d9fa65bb53fd02d01a",
+    "audit_manifest": "/Volumes/Graduate Program Documents/confyui/刀版图识别主题/experiments/cra_objective/data_audit/manifest.csv",
+    "script": "/Volumes/Graduate Program Documents/confyui/刀版图识别主题/experiments/cra_objective/color_knowledge/run_color_knowledge.py",
+    "script_sha256": "c794db8fcba3e015294ac1d9ecb52b27f1591fb637d5c4c7c9a7a41304e1ab0b",
+    "selection_py_sha256": "ab13ac8583cb4309aa5cddc72cadcf1e6f8a336617ff5211362beecf41c116a0",
+    "random_seed": 20260731,
+    "source_image_count": 370,
+    "val_image_access_count": 0,
+    "test_image_access_count": 0
+  },
+  "parameters": {
+    "per_image_k": 6,
+    "global_k_candidates": [
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "selected_global_k": 9,
+    "max_analysis_side": 512,
+    "max_kmeans_pixels": 30000,
+    "black_Lstar_max": 30.0,
+    "paper_Lstar_min": 72.0,
+    "paper_Cstar_max": 22.0,
+    "paper_deltaE76_max": 12.0,
+    "bootstrap_reps": 1000,
+    "bootstrap_unit": "logical work"
+  }
+}
