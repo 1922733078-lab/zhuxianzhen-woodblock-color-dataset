@@ -2,7 +2,7 @@
 
 **Paper Title:** 面向朱仙镇木版年画的色彩知识约束扩散模型线稿上色与文创应用 (Color-Knowledge Constrained Diffusion Model for Zhuxianzhen Woodblock New Year Print Colorization and Creative Product Application)  
 **Target Journal:** *Color Research & Application* (Wiley)  
-**Primary Archive:** [GitHub: 192273078-lab/zhuxianzhen-woodblock-color-dataset](https://github.com/192273078-lab/zhuxianzhen-woodblock-color-dataset)  
+**Primary Archive:** [GitHub: 1922733078-lab/zhuxianzhen-woodblock-color-dataset](https://github.com/1922733078-lab/zhuxianzhen-woodblock-color-dataset)  
 **Permanent Digital Object Identifier (DOI):** To be registered upon final acceptance via Zenodo / OSF.
 
 ---
