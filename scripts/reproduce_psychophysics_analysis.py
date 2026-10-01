@@ -29,7 +29,7 @@ def load_data(filepath=None):
 
 def compute_head_to_head_win_rates(df):
     print("=" * 70)
-    print("1. HEAD-TO-HEAD WIN RATES (M4 vs. Competitors)")
+    print("1. HEAD-TO-HEAD WIN RATES (descriptive pooled one-sided binomial tests)")
     print("=" * 70)
     
     competitors = ['M0', 'M1', 'DDColor', 'Reinhard']
@@ -81,10 +81,10 @@ def compute_observer_level_ttest(df):
     obs_rates = np.array(obs_rates)
     mean_rate = np.mean(obs_rates)
     sd_rate = np.std(obs_rates, ddof=1)
-    t_stat, p_val = stats.ttest_1samp(obs_rates, 0.5, alternative='greater')
+    t_stat, p_val = stats.ttest_1samp(obs_rates, 0.5, alternative='two-sided')
     
     print(f"Observers (n={len(obs_rates)}): Mean win rate = {mean_rate*100:.1f}%, SD = {sd_rate:.3f}")
-    print(f"One-sample t-test against 0.50 (chance): t({len(obs_rates)-1}) = {t_stat:.2f}, p = {p_val:.4e}")
+    print(f"Two-sided observer-level t-test against 0.50: t({len(obs_rates)-1}) = {t_stat:.2f}, p = {p_val:.4e}")
 
 def compute_thurstone_case_v(df):
     print("\n" + "=" * 70)
@@ -158,7 +158,14 @@ def compute_kendall_w(df):
         r_bar = np.mean(r_sums)
         s = np.sum((r_sums - r_bar) ** 2)
         
-        w = (12 * s) / (m**2 * (k**3 - k))
+        tie_sum = 0
+        for row in ranks:
+            _, counts = np.unique(row, return_counts=True)
+            tie_sum += sum(int(count**3 - count) for count in counts if count > 1)
+        denominator = m**2 * (k**3 - k) - m * tie_sum
+        if denominator <= 0:
+            raise ValueError("Kendall concordance is undefined when all ranks tie.")
+        w = (12 * s) / denominator
         chi2 = m * (k - 1) * w
         p_val = stats.chi2.sf(chi2, df=k - 1)
         
@@ -178,7 +185,7 @@ def main():
     compute_observer_level_ttest(df)
     compute_thurstone_case_v(df)
     compute_kendall_w(df)
-    print("\nAll psychophysical analyses completed successfully and match paper statistics.")
+    print("\nAnalysis completed. Concordance is tie-corrected; compare outputs against the corresponding manuscript version.")
 
 if __name__ == "__main__":
     main()

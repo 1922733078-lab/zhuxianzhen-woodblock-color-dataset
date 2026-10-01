@@ -18,7 +18,7 @@ Traditional Zhuxianzhen woodblock New Year prints embody distinctive folk polych
 
 To overcome the **unconstrained metric paradox** (where naive algorithms minimize pixel distance at the cost of authentic cultural aesthetics), this study introduces a **color-knowledge constrained diffusion pipeline (M4)** coupled with rigorous physical colorimetry and psychophysical evaluation.
 
-This repository provides the complete, de-identified research datasets, physical spectrophotometric ledgers, color priors, and one-click reproduction scripts supporting the published findings.
+This repository provides released de-identified observer records, physical measurement ledgers, the image-referred color prior, split manifests, and analysis scripts. It does not contain the complete artwork image corpus or model weights. See [Reproduction Scope](docs/REPRODUCTION_SCOPE.md) for endpoint coverage, statistical conventions and manuscript synchronization requirements.
 
 ---
 
@@ -47,7 +47,7 @@ zhuxianzhen-woodblock-color-dataset/
 │   │   ├── 图_L时序_全量.png                         # Luminance temporal repeatability
 │   │   └── README.md                                 # Instrument protocol & Bradford setup
 │   ├── color_prior/               # Parametric woodblock color palette
-│   │   ├── train_color_prior.json                    # K=9 Gaussian mixture prior (D65/2°)
+│   │   ├── train_color_prior.json                    # K=9 weighted color-center prior (D65/2°)
 │   │   └── README.md                                 # Palette definitions & extraction
 │   └── splits/                    # Leakage-safe artwork partitioning
 │       ├── suggested_split_manifest.csv              # 460 works (370 train / 45 val / 45 test)
@@ -74,7 +74,7 @@ zhuxianzhen-woodblock-color-dataset/
 ### 2. Physical Spectrophotometric Ledger (`data/spectrophotometry/`)
 - **Instrument:** X-Rite i1Pro 3 spectrophotometer (standard D50 / 2° physical printing geometry).
 - **Scope:** 63 physical readings across 20 independent measurement sessions on two genuine antique woodblock prints.
-- **Repeatability:** Max pairwise $\Delta E_{00} \le 0.0475$ within any session (instrument error ceiling $< 0.05$).
+- **Repeatability:** Maximum within-session pairwise $\Delta E_{00}=0.04754939$ (rounded: 0.0475), below the validation threshold of 0.05; this is observed repeatability, not an instrument-wide error ceiling.
 - **Chromatic Adaptation:** Physical D50 readings converted to digital D65/2° frame via Bradford transform matrix for equitable cross-domain comparison.
 
 ### 3. Woodblock Color Knowledge Prior (`data/color_prior/`)
@@ -112,14 +112,14 @@ python scripts/reproduce_psychophysics_analysis.py
   - M4 vs DDColor: **385/480 (80.2%)**, $p = 9.93 \times 10^{-43}$
   - M4 vs Reinhard: **372/480 (77.5%)**, $p = 2.73 \times 10^{-35}$
 - **Observer-Level Clustered $t$-test (Eliminating Pseudoreplication):**
-  - $t(19) = 7.94$, $p = 9.43 \times 10^{-8}$ (Mean win rate = 66.9%, SD = 0.095).
+  - Two-sided $t(19) = 7.94$, $p = 1.89 \times 10^{-7}$ (Mean win rate = 66.9%, SD = 0.095). Pooled binomial probabilities above are one-sided descriptive calculations.
 - **Thurstone Case V Z-Scores ($M1 = 0$ Baseline):**
   - Overall: M4 = **+0.648**, M0 = **+0.236**, M1 = **0.000**, DDColor = **-0.194**, Reinhard = **-0.246**
   - Style Authenticity: M4 = **+0.878**, M0 = **+0.482**
   - Visual Harmony: M4 = **+0.449**, M0 = **+0.012**
 - **Inter-Observer Reliability (Kendall's $W$):**
-  - Overall ($m=20$): $W = 0.8645$, $\chi^2(4) = 69.16$, $p = 3.41 \times 10^{-14}$
-  - Faculty Experts ($m=8$): $W = 0.8344$, $\chi^2(4) = 26.70$, $p = 2.29 \times 10^{-5}$
+  - Overall ($m=20$, tie-corrected): $W = 0.8688$, $\chi^2(4) = 69.51$, approximate $p = 2.88 \times 10^{-14}$
+  - Faculty Experts ($m=8$, tie-corrected): $W = 0.8449$, $\chi^2(4) = 27.04$, approximate $p = 1.95 \times 10^{-5}$
   - Student Trainees ($m=12$): $W = 0.8875$, $\chi^2(4) = 42.60$, $p = 1.25 \times 10^{-8}$
 
 ### Reproduce Spectrophotometry Analysis

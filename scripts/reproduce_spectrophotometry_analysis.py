@@ -10,7 +10,7 @@ and CIEDE2000 color difference evaluation reported in:
 
 Dataset: 63 physical measurements across 20 sessions on two authentic woodblock prints
 Instrument: X-Rite i1Pro 3 spectrophotometer (380-730 nm, 10 nm step, D50/2°)
-Target: Bradford chromatic adaptation to D65/2° compared against training prior centers
+Scope: repeatability and Bradford adaptation to D65/2°; no patch-to-prior mapping is supplied
 """
 
 import os
@@ -156,8 +156,22 @@ def main():
                         max_de = de
             sess_repeats.append((sid, max_de))
     max_repeat_de = max(d[1] for d in sess_repeats)
-    print(f"Within-session repeatability: Maximum pairwise Delta E00 across all sessions = {max_repeat_de:.4f} (<= 0.0475)")
-    print(f"Repeatability validation status: PASS (Rigorous instrument precision confirmed)")
+    print(f"Within-session maximum pairwise Delta E00 = {max_repeat_de:.8f}")
+    threshold = 0.05
+    passed = max_repeat_de < threshold
+    print(f"Repeatability validation (< {threshold}): {'PASS' if passed else 'FAIL'}")
+    adapted = np.array([
+        xyz_to_lab(bradford_adapt_d50_to_d65(row))
+        for row in df[['X', 'Y', 'Z']].to_numpy()
+    ])
+    print(f"Bradford-adapted {len(adapted)} readings from D50 to D65/2 degrees.")
+    print("session_id,n_readings,L_D65,a_D65,b_D65")
+    for sid, group in df.groupby('session_id'):
+        center = adapted[group.index].mean(axis=0)
+        print(f"{sid},{len(group)},{center[0]:.6f},{center[1]:.6f},{center[2]:.6f}")
+    print("No physical patch-to-prior assignment is inferred from unlabeled sessions.")
+    if not passed:
+        raise SystemExit(1)
     print("=" * 75)
 
 if __name__ == "__main__":
