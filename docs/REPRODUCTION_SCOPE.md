@@ -12,7 +12,7 @@ Kendall concordance uses average ranks for tied observer win totals and corrects
 
 The CSV contains 63 reading rows in 20 sessions, not 63 independent patches. The maximum within-session CIEDE2000 difference is 0.04754939, which rounds to 0.0475 but is not literally <=0.0475. The validation threshold is <0.05, evaluated by an actual conditional check. The script now executes Bradford adaptation on recorded XYZ values and reports session means in the D65/2-degree frame.
 
-The released ledger does not supply a verified session-to-artwork-name-to-pigment-group mapping for the manuscript's ten-row physical comparison. No such mapping is guessed by the script. Adaptation and repeatability do not prove pigment chemistry, antiquity, original unfaded color or agreement with every prior center.
+The session-to-family mapping for the physical comparison is provided in `session_color_family_map.csv` (work A = sessions S002–S007, work B = S008–S020, derived from the measurement snapshot records). The spectrophotometry script regenerates the family-pooled comparison of the revised manuscript's Table 10 from the released ledger, this mapping and the nine-color prior. Adaptation, repeatability and family pooling do not prove pigment chemistry, antiquity or un-degraded color.
 
 ## Color prior and splits
 
@@ -20,4 +20,4 @@ The prior is digitized-image-referred color appearance with assumed sRGB encodin
 
 ## Manuscript synchronization
 
-The original submission version contains numerical and mapping discrepancies requiring reconciliation against its final experimental records, notably the ten-row physical table and the M3/component-ablation claims. Those discrepancies are not repaired by creating placeholders or relabeling unrelated experimental runs. Use this archive only for endpoints reproducible from its actual released inputs. Paper-level claims should be checked against the exact manuscript version and its independently verified source files.
+The physical comparison table (Table 10) of the revised manuscript (2026-10-01) is regenerable from the released ledger, mapping and prior. The component-ablation table (M3) and several Table 5 dispersion statistics still require reconciliation against the authors' final evaluation archive and are not regenerable from released assets. Paper-level claims should be checked against the exact manuscript version and its independently verified source files.

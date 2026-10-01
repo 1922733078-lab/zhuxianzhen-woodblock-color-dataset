@@ -10,7 +10,7 @@ and CIEDE2000 color difference evaluation reported in:
 
 Dataset: 63 physical measurements across 20 sessions on two authentic woodblock prints
 Instrument: X-Rite i1Pro 3 spectrophotometer (380-730 nm, 10 nm step, D50/2°)
-Scope: repeatability and Bradford adaptation to D65/2°; no patch-to-prior mapping is supplied
+Scope: repeatability, Bradford adaptation to D65/2°, and the family-pooled comparison regenerated via session_color_family_map.csv
 """
 
 import os
@@ -169,7 +169,43 @@ def main():
     for sid, group in df.groupby('session_id'):
         center = adapted[group.index].mean(axis=0)
         print(f"{sid},{len(group)},{center[0]:.6f},{center[1]:.6f},{center[2]:.6f}")
-    print("No physical patch-to-prior assignment is inferred from unlabeled sessions.")
+    # Family pooling per session_color_family_map.csv; regenerates the manuscript's
+    # Table 10 family comparison (nearest centers are computed, not hand-assigned).
+    map_path = os.path.join(script_dir, "..", "data", "spectrophotometry", "session_color_family_map.csv")
+    if not os.path.exists(map_path):
+        print("session_color_family_map.csv not found; skipping family comparison.")
+    else:
+        fmap = pd.read_csv(map_path).set_index("session_id")
+        sess_d65 = {}
+        for sid, group in df.groupby('session_id'):
+            sess_d65[sid] = adapted[group.index].mean(axis=0)
+        centers = np.array(prior_data['palette']['centers_lab'])
+        center_names = ['C1 Crimson', 'C2 Warm Gray', 'C3 Dark Gray', 'C4 Yellow', 'C5 Orange-Red',
+                        'C6 Malachite Green', 'C7 Ochre Brown', 'C8 Teal', 'C9 Purple']
+
+        def report_family(name, sids):
+            pts = np.array([sess_d65[s] for s in sids])
+            pooled = pts.mean(axis=0)
+            ranked = sorted((float(ciede2000(pooled, c)), nm) for nm, c in zip(center_names, centers))
+            print(f"{name}: n_points={len(sids)} pooled_D65=({pooled[0]:.1f} / {pooled[1]:.1f} / {pooled[2]:.1f}) "
+                  f"nearest={ranked[0][1]} dE00={ranked[0][0]:.2f} next={ranked[1][1]} dE00={ranked[1][0]:.2f}")
+
+        artwork = fmap[fmap['color_family'] != 'white_reference']
+        families = {}
+        for sid, row in artwork.iterrows():
+            families.setdefault(row['color_family'], []).append(sid)
+        print("=" * 75)
+        print("FAMILY POOLED COMPARISON (D65/2-degree frame; regenerates manuscript Table 10)")
+        print("=" * 75)
+        for fam in ['gray_dark', 'gray_light', 'yellow', 'purple', 'red_orange', 'green']:
+            report_family(fam, families[fam])
+        report_family('yellow_w2_only_primary', [s for s in families['yellow'] if fmap.loc[s, 'work'] == 'B'])
+        pa, pb = sess_d65['S002'], sess_d65['S008']
+        print(f"paper_substrate: A=({pa[0]:.1f} / {pa[1]:.1f} / {pa[2]:.1f}) B=({pb[0]:.1f} / {pb[1]:.1f} / {pb[2]:.1f}) "
+              f"cross_work_dE00={float(ciede2000(pa, pb)):.2f} (substrate is not a palette center)")
+        print("Ochre Brown (C7), Teal (C8) and Orange-Red (C5) have no dedicated physical color blocks; "
+              "C5 and C8 appear only as next-nearest comparisons. The yellow primary row uses the three "
+              "work-B points per the frozen convention; the w1 cream block is a sensitivity variant.")
     if not passed:
         raise SystemExit(1)
     print("=" * 75)
